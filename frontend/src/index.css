@@ -1,0 +1,734 @@
+/* ==========================================================================
+   Ledger — design tokens
+   A task tracker styled like a well-kept paper ledger: warm paper ground,
+   near-black ink, a single deep-indigo accent for actions, and three
+   status inks (amber / blue / green) that read like rubber stamps.
+   ========================================================================== */
+
+:root {
+  --paper: #faf7f0;
+  --paper-raised: #ffffff;
+  --ink: #1c1b19;
+  --ink-soft: #57534a;
+  --ink-faint: #8a8478;
+  --rule: #e4ddcd;
+  --rule-strong: #d6cdb6;
+
+  --accent: #2a3eb1;
+  --accent-ink: #1c2b85;
+  --accent-wash: #eaecfb;
+
+  --amber: #a6640a;
+  --amber-wash: #fbf0dc;
+  --blue: #1d5fa8;
+  --blue-wash: #e3edf9;
+  --green: #217a4f;
+  --green-wash: #e1f1e7;
+  --red: #b2412f;
+  --red-wash: #fbe9e5;
+
+  --font-display: "Fraunces", Georgia, serif;
+  --font-body: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+
+  --radius: 10px;
+  --radius-sm: 6px;
+  --shadow-card: 0 1px 2px rgba(28, 27, 25, 0.04), 0 8px 20px -12px rgba(28, 27, 25, 0.18);
+  --shadow-modal: 0 20px 50px -12px rgba(28, 27, 25, 0.35);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  color-scheme: light;
+}
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  color: var(--ink);
+  margin: 0 0 0.4em;
+  letter-spacing: -0.01em;
+}
+
+h1 {
+  font-size: clamp(1.9rem, 1.5rem + 1.6vw, 2.75rem);
+  line-height: 1.12;
+}
+
+h1 em {
+  font-style: italic;
+  color: var(--accent);
+}
+
+p {
+  margin: 0 0 1em;
+  color: var(--ink-soft);
+}
+
+a {
+  color: var(--accent-ink);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+button {
+  font-family: inherit;
+}
+
+.eyebrow {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 0.6em;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* ------------------------------ Layout ------------------------------ */
+
+main {
+  min-height: calc(100vh - 68px);
+}
+
+.page {
+  max-width: 920px;
+  margin: 0 auto;
+  padding: 48px 24px 80px;
+}
+
+.page--narrow {
+  max-width: 560px;
+}
+
+.page--center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  min-height: 60vh;
+}
+
+.page__lede {
+  max-width: 40ch;
+}
+
+/* ------------------------------ Navbar ------------------------------ */
+
+.nav {
+  border-bottom: 1px solid var(--rule);
+  background: var(--paper);
+  position: sticky;
+  top: 0;
+  z-index: 20;
+}
+
+.nav__inner {
+  max-width: 1040px;
+  margin: 0 auto;
+  padding: 16px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.nav__brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1.15rem;
+  color: var(--ink);
+}
+
+.nav__brand:hover {
+  text-decoration: none;
+}
+
+.nav__mark {
+  width: 14px;
+  height: 14px;
+  background: var(--accent);
+  border-radius: 3px;
+  transform: rotate(45deg);
+}
+
+.nav__links {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  font-size: 0.94rem;
+}
+
+.nav__links a {
+  color: var(--ink-soft);
+}
+
+.nav__links a:hover {
+  color: var(--ink);
+}
+
+.nav__user {
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  color: var(--ink-faint);
+}
+
+/* ------------------------------ Buttons ------------------------------ */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  padding: 10px 18px;
+  font-size: 0.92rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease, transform 0.05s ease;
+}
+
+.btn:active {
+  transform: translateY(1px);
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btn--primary {
+  background: var(--accent);
+  color: #fff;
+}
+
+.btn--primary:hover:not(:disabled) {
+  background: var(--accent-ink);
+  text-decoration: none;
+}
+
+.btn--ghost {
+  background: transparent;
+  border-color: var(--rule-strong);
+  color: var(--ink);
+}
+
+.btn--ghost:hover:not(:disabled) {
+  border-color: var(--ink-faint);
+  text-decoration: none;
+}
+
+.btn--danger-ghost {
+  background: transparent;
+  border-color: transparent;
+  color: var(--red);
+}
+
+.btn--danger-ghost:hover:not(:disabled) {
+  background: var(--red-wash);
+  text-decoration: none;
+}
+
+.btn--danger {
+  background: var(--red);
+  color: #fff;
+}
+
+.btn--danger:hover:not(:disabled) {
+  background: #8f3324;
+}
+
+.btn--sm {
+  padding: 6px 12px;
+  font-size: 0.82rem;
+}
+
+.btn--lg {
+  padding: 13px 26px;
+  font-size: 1rem;
+}
+
+.btn--full {
+  width: 100%;
+}
+
+.btn__spinner {
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  border-top-color: #fff;
+  animation: spin 0.7s linear infinite;
+}
+
+.btn--ghost .btn__spinner {
+  border-color: rgba(28, 27, 25, 0.25);
+  border-top-color: var(--ink);
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ------------------------------ Hero ------------------------------ */
+
+.hero {
+  padding: 72px 24px 40px;
+}
+
+.hero__inner {
+  max-width: 720px;
+  margin: 0 auto;
+  text-align: left;
+}
+
+.hero__lede {
+  font-size: 1.08rem;
+  max-width: 52ch;
+}
+
+.hero__actions {
+  display: flex;
+  gap: 12px;
+  margin: 28px 0 48px;
+  flex-wrap: wrap;
+}
+
+.hero__stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  max-width: 520px;
+  margin: 0;
+  padding-top: 24px;
+  border-top: 1px solid var(--rule);
+}
+
+.hero__stats dt {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ink-faint);
+  margin-bottom: 4px;
+}
+
+.hero__stats dd {
+  margin: 0;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+/* ------------------------------ Auth pages ------------------------------ */
+
+.auth-page {
+  display: flex;
+  justify-content: center;
+  padding: 64px 24px;
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 400px;
+  background: var(--paper-raised);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  padding: 36px 32px;
+  box-shadow: var(--shadow-card);
+}
+
+.auth-card__sub {
+  margin-bottom: 24px;
+}
+
+.auth-card__footer {
+  margin: 20px 0 0;
+  font-size: 0.9rem;
+  text-align: center;
+  color: var(--ink-faint);
+}
+
+/* ------------------------------ Forms ------------------------------ */
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1;
+}
+
+.field-row {
+  display: flex;
+  gap: 16px;
+}
+
+.field label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.field__hint {
+  font-size: 0.78rem;
+  color: var(--ink-faint);
+}
+
+.field input,
+.field select,
+.field textarea {
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  padding: 10px 12px;
+  border: 1px solid var(--rule-strong);
+  border-radius: var(--radius-sm);
+  background: var(--paper-raised);
+  color: var(--ink);
+}
+
+.field input:focus,
+.field select:focus,
+.field textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-wash);
+}
+
+.field textarea {
+  resize: vertical;
+  font-family: var(--font-body);
+}
+
+.form__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 4px;
+}
+
+.form__error {
+  background: var(--red-wash);
+  color: var(--red);
+  border: 1px solid rgba(178, 65, 47, 0.25);
+  border-radius: var(--radius-sm);
+  padding: 10px 14px;
+  font-size: 0.88rem;
+  margin-bottom: 4px;
+}
+
+/* ------------------------------ Dashboard ------------------------------ */
+
+.dashboard-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+.dashboard-header h1 {
+  margin: 0;
+}
+
+.filter-bar {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 28px;
+  flex-wrap: wrap;
+}
+
+.filter-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: 1px solid var(--rule-strong);
+  background: var(--paper-raised);
+  color: var(--ink-soft);
+  border-radius: 999px;
+  padding: 7px 14px;
+  font-size: 0.84rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.filter-chip--active {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: #fff;
+}
+
+.filter-chip__count {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  opacity: 0.75;
+}
+
+/* ------------------------------ Task list & cards ------------------------------ */
+
+.task-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.task-card {
+  display: flex;
+  gap: 16px;
+  background: var(--paper-raised);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  padding: 18px 20px;
+  box-shadow: var(--shadow-card);
+}
+
+.task-card__rule {
+  width: 4px;
+  border-radius: 4px;
+  background: var(--ink-faint);
+  flex-shrink: 0;
+}
+
+.task-card.status--pending .task-card__rule {
+  background: var(--amber);
+}
+.task-card.status--progress .task-card__rule {
+  background: var(--blue);
+}
+.task-card.status--done .task-card__rule {
+  background: var(--green);
+}
+
+.task-card__main {
+  flex: 1;
+  min-width: 0;
+}
+
+.task-card__top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.task-card__title {
+  font-family: var(--font-display);
+  font-size: 1.08rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.task-card.status--done .task-card__title {
+  color: var(--ink-faint);
+  text-decoration: line-through;
+  text-decoration-color: var(--rule-strong);
+}
+
+.task-card__desc {
+  margin: 6px 0 0;
+  font-size: 0.92rem;
+  color: var(--ink-soft);
+}
+
+.task-card__meta {
+  margin-top: 10px;
+  font-family: var(--font-mono);
+  font-size: 0.76rem;
+  color: var(--ink-faint);
+}
+
+.task-card__due--late {
+  color: var(--red);
+}
+
+.badge {
+  flex-shrink: 0;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 4px 9px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+.badge.status--pending {
+  background: var(--amber-wash);
+  color: var(--amber);
+}
+.badge.status--progress {
+  background: var(--blue-wash);
+  color: var(--blue);
+}
+.badge.status--done {
+  background: var(--green-wash);
+  color: var(--green);
+}
+
+.task-card__actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.task-card__quick-status {
+  font-family: var(--font-mono);
+  font-size: 0.76rem;
+  padding: 6px 8px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--rule-strong);
+  background: var(--paper);
+  color: var(--ink-soft);
+}
+
+/* ------------------------------ Empty state ------------------------------ */
+
+.empty-state {
+  text-align: center;
+  padding: 64px 24px;
+  border: 1px dashed var(--rule-strong);
+  border-radius: var(--radius);
+  background: var(--paper-raised);
+}
+
+.empty-state__mark {
+  display: inline-block;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: var(--accent-wash);
+  border: 1px solid var(--accent);
+  margin-bottom: 16px;
+}
+
+/* ------------------------------ Loader ------------------------------ */
+
+.loader {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--ink-faint);
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+}
+
+.loader__mark {
+  width: 16px;
+  height: 16px;
+  border-radius: 4px;
+  border: 2px solid var(--rule-strong);
+  border-top-color: var(--accent);
+  animation: spin 0.8s linear infinite;
+}
+
+/* ------------------------------ Modal ------------------------------ */
+
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(28, 27, 25, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  z-index: 50;
+}
+
+.modal {
+  width: 100%;
+  max-width: 420px;
+  background: var(--paper-raised);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-modal);
+  padding: 24px;
+}
+
+.modal__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.modal__header h2 {
+  font-size: 1.2rem;
+  margin: 0;
+}
+
+.modal__close {
+  border: none;
+  background: none;
+  font-size: 1.4rem;
+  line-height: 1;
+  color: var(--ink-faint);
+  cursor: pointer;
+  padding: 2px 6px;
+}
+
+.modal__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+/* ------------------------------ Responsive ------------------------------ */
+
+@media (max-width: 640px) {
+  .nav__inner {
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .task-card {
+    flex-direction: column;
+  }
+
+  .task-card__actions {
+    justify-content: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .field-row {
+    flex-direction: column;
+  }
+
+  .hero__stats {
+    grid-template-columns: 1fr;
+  }
+}
