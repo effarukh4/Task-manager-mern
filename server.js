@@ -8,7 +8,7 @@ const { notFound, errorHandler } = require("./middleware/errorMiddleware");
 const app = express();
 const cors = require("cors");
 app.use(cors({
-  origin: "https://task-manager-mern-56aq.vercel.app",
+  origin: "https://taskmanager-one-puce.vercel.app",
   credentials: true
 }));
 
@@ -36,6 +36,15 @@ app.use((req, res, next) => {
 // Health check
 app.get("/", (req, res) => {
   res.json({ success: true, message: "Task Manager API is running" });
+});
+// TEMPORARY DEBUG ROUTE - remove after diagnosing
+app.get("/debug-env", (req, res) => {
+  res.json({
+    hasMongoUri: !!process.env.MONGO_URI,
+    mongoUriLength: process.env.MONGO_URI ? process.env.MONGO_URI.length : 0,
+    nodeEnv: process.env.NODE_ENV,
+    vercelEnv: process.env.VERCEL_ENV,
+  });
 });
 
 // Routes
